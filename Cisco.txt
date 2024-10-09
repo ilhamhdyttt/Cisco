@@ -1,0 +1,106 @@
+Perintah-perintah dasar Router Cisco
+Masuk dengan console terminal pada cisco.
+
+Masuk mode privilage #
+Secara default, CLI (Command Line Interface) akan masuk ke mode user, tandanya adalah simbol “>” yang ada di bagian depan nama host (dalam hal ini “router”), pada mode user Anda tidak dapat mengkonfigurasi apapun, oleh karena itu Anda perlu beralih ke mode privileged (juga di kenal sebagai EXEC-level mode) dengan perintah “router>enable” kemudian tekan Enter, apabila perintah berhasil tereksekusi, maka simbol di depan nama host akan berubah menjadi “#” (misalnya “router#”).
+
+setelah masuk pada mode ini kamu bisa melihat berbagai macam yang ada pada router tetapi tidak bisa merubah.
+
+Router>enable
+Sehingga menjadi
+
+Router#
+Masuk mode configurasi :
+setelah masuk pada mode ini kalian bisa merubah beberapa konfigurasi yang di inginkan
+
+Router# config terminal
+Sehingga menjadi
+
+Router(config)#
+Melihat daftar perintah yang tersedia untuk di eksekusi
+Router# show ?
+Menampilkan file konfigurasi yang sedang di jalankan pada RAM.
+Router#show running-config
+Menampilkan file konfigurasi yang di jalankan saat startup
+Router#show startup-config
+Menyimpan pengaturan yang sedang berjalan pada RAM ke NVRAM sehingga dapat di terapkan pada saat start-up
+Router#copy running-config startup-config
+Menghapus Konfigurasi
+Router#write erase
+Menghapus file konfigurasi yang di simpan pada NVRAM
+Router# erase startup-config
+Meyimpan running-config ke TFTP Server
+Router# copy running-config tftp
+Menampilkan pengguna yang sedang terhubung ke jaringan (router)
+Router# show users
+Menampilkan riwayat perintah yang telah di eksekusi sebelumnya
+Router# show history
+Contoh melakukan konfigurasi ip address pada router cisco.
+pertama silahkan masuk pada mode konfig interface mana yang akan di konfigurasi, pada contoh ini dilakukan konfigurasi pada interface GigabitInterface 0/0/
+
+router1# config terminal
+router1(config)#interface g0/0
+router1(config-if)#ip add 192.168.100.1 255.255.255.0
+router1(config-if)#no shutdown
+router1(config-if)#
+%LINK-5-CHANGED: Interface GigabitEthernet0/0, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/0, changed state to up
+
+router1(config-if)#end
+Cek IP Address
+router1# show ip interface
+atau
+
+router1# show ip interface brief
+Hasil dari petintah di atas
+
+Router1#show ip interface brief
+Interface              IP-Address      OK? Method Status                Protocol
+
+GigabitEthernet0/0     10.10.10.2      YES manual up                    up
+
+GigabitEthernet0/1     172.116.16.1    YES manual up                    up
+
+Vlan1                  unassigned      YES unset  administratively down down
+Konfigurasi DHCP Server pada router cisco
+Pemberian nama pada DHCP Pool
+Menentukan Network Address dan subnet mask
+Memberikan IP Router (Gateway)
+Memberikan DNS-Server (DNS default google)
+Perintah :
+
+Router(config)#ip dhcp pool dept1
+Router(dhcp-config)#network 192.168.10.0 255.255.255.0
+Router(dhcp-config)#default-router 192.168.10.1
+Router(dhcp-config)#dns-server 8.8.8.8
+Membuat Banner motd:
+Cara1
+Router>enable
+Router#conf t
+Router(config)#banner motd *Banner Router1* (untuk membuat isi pesan lebih dari satu baris bisa menggunakan "~")
+Router(config)#end
+Router#exit
+Cara2
+Untuk membuat banner dengan pesan lebih dari satu baris anda dapat menggunakan simbol ($) dan ditutup kembali dengan simbol ($).
+Router>enable
+Router#conf t
+Router(config)#banner motd $Peringatan!
+                            Selain petugas di larang masuk $
+Router(config)#end
+Router#exit
+Memasukkan hostname :
+Router>enable
+Router#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#hostname router1
+router1# <----------perhatikan perubahan disini.
+Membuat username dan password  :
+Router1(config)#username admini password P455w0rd
+Router1(config)#line console 0
+Router1(config-line)#login local
+Router1(config-line)#exit
+Router1(config)#end
+Router1#exit
+Menampilkan routing tabel
+show ip route
